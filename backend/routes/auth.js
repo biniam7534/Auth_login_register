@@ -3,12 +3,7 @@ import User from '../models/User.js';
 import {protect} from "../middleware/auth.js"
 import jwt from 'jsonwebtoken'
 const router = express.Router();
-
-const generateToken = (id) => {
-    return jwt.sign({ id }, process.env.JWT_SECRET, {
-        expiresIn: "30d"
-    });
-}
+//register
 router.post("/register", async (req, res) => {
     const { username, email, password } = req.body;
 
@@ -27,42 +22,56 @@ router.post("/register", async (req, res) => {
         return res.status(201).json({
             id: user._id,
             username: user.username,
-            email: user.email
+            email: user.email,
+            token,
+            
         });
 
     } catch (err) {
+        console.error("Register error:", err);
         return res.status(500).json({ message: "Server error", error: err.message });
     }
 });
-
+//login
 router.post("/login", async (req, res) => {
     const {email, password} = req.body;
     try {
         if (!email || !password){
             return res 
-            ,status(400)
+            .status(400)
             .json({message: "please fill will the fields"})
         }
         const user = await User.findOne({email});
-        if (!user || (!await user.matchpassword(password))){
+        if (!user || !(await user.matchPassword(password))) {
+
             return res 
-            ,status(401)
+            .status(401)
             .json({message: "Invalid credentials"})
 
         }
-        res.json({
-             id: user._id,
+        const token = generateToken(user._id);
+        res.status(200).json({
+            id: user._id,
             username: user.username,
-            email: user.email
+            email: user.email,
+            token,
         });
 
     } catch (err){
+        console.error("Login error:", err);
         return res.status(500).json({ message: "Server error", error: err.message });
 
     }
 });
+// me
 router.get("/me", protect, async(req, res) => {
     res.status(200).json(req.user)
-})
+});
+// to generate JWT token
+function generateToken(id) {
+    return jwt.sign({ id }, process.env.JWT_SECRET, {
+        expiresIn: "30d"
+    });
+}
 
 export default router;
