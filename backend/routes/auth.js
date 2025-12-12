@@ -1,8 +1,14 @@
 import express from 'express';
 import User from '../models/User.js';
-
+import {protect} from "../middleware/auth.js"
+import jwt from 'jsonwebtoken'
 const router = express.Router();
 
+const generateToken = (id) => {
+    return jwt.sign({ id }, process.env.JWT_SECRET, {
+        expiresIn: "30d"
+    });
+}
 router.post("/register", async (req, res) => {
     const { username, email, password } = req.body;
 
@@ -17,7 +23,7 @@ router.post("/register", async (req, res) => {
         }
 
         const user = await User.create({ username, email, password });
-
+        const token = generateToken(user._id);
         return res.status(201).json({
             id: user._id,
             username: user.username,
@@ -54,6 +60,9 @@ router.post("/login", async (req, res) => {
         return res.status(500).json({ message: "Server error", error: err.message });
 
     }
+});
+router.get("/me", protect, async(req, res) => {
+    res.status(200).json(req.user)
 })
 
 export default router;
