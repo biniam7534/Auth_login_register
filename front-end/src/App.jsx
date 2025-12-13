@@ -8,7 +8,8 @@ import axios from "axios";
 
 function App() {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(" ");
+  console.log(user);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -47,26 +48,19 @@ function App() {
   return (
     <Router>
       <Navbar user={user} setUser={setUser} />
-
       <Routes>
-        {/* Protected Route */}
         <Route
           path="/home"
-          element={user ? <Home /> : <Navigate to="/login" />}
+          element={user ? <Home user={user} error={error} /> : <Navigate to="/login" />}
         />
-
-        {/* Public Routes */}
         <Route
           path="/login"
           element={!user ? <Login setUser={setUser} /> : <Navigate to="/home" />}
         />
-
         <Route
           path="/register"
-          element={!user ? <Register /> : <Navigate to="/home" />}
+          element={!user ? <Register setUser={setUser}/> : <Navigate to="/home" />}
         />
-
-        {/* Default */}
         <Route path="*" element={<Navigate to="/home" />} />
       </Routes>
     </Router>
