@@ -1,14 +1,15 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import Navbar from "components/Navbar";
+import Navbar from "./components/Navbar";
 import Home from "./Pages/Home";
 import Login from "./Pages/Login";
 import Register from "./Pages/Register";
-import { useState, useEffect } from "react";
+import { useEffect, useState  } from "react";
 import axios from "axios";
 
 function App() {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(" ");
+  const [error, setError] = useState("");
+  const [isloading, setIsLoading] = useState(true);
   console.log(user);
 
   useEffect(() => {
@@ -30,17 +31,17 @@ function App() {
       } catch (err) {
         localStorage.removeItem("token");
       } finally {
-        setLoading(false);
+        setIsLoading(false);
       }
     };
 
     fetchUser();
   }, []);
 
-  if (loading) {
+  if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        Loading...
+      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+        <div className="text-xl text-white">Loading...</div>
       </div>
     );
   }
@@ -50,18 +51,16 @@ function App() {
       <Navbar user={user} setUser={setUser} />
       <Routes>
         <Route
-          path="/home"
-          element={user ? <Home user={user} error={error} /> : <Navigate to="/login" />}
-        />
+          path="/"
+          element={ <Home user={user} error={error} /> } />
         <Route
           path="/login"
-          element={!user ? <Login setUser={setUser} /> : <Navigate to="/home" />}
+          element={<Login setUser={setUser} />}
         />
         <Route
           path="/register"
-          element={!user ? <Register setUser={setUser}/> : <Navigate to="/home" />}
+          element={<Register setUser={setUser} />}
         />
-        <Route path="*" element={<Navigate to="/home" />} />
       </Routes>
     </Router>
   );
