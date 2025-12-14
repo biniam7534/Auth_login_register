@@ -9,7 +9,7 @@ import axios from "axios";
 function App() {
   const [user, setUser] = useState(null);
   const [error, setError] = useState("");
-  const [isloading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   console.log(user);
 
   useEffect(() => {
@@ -17,7 +17,7 @@ function App() {
       const token = localStorage.getItem("token");
 
       if (!token) {
-        setLoading(false);
+        setIsLoading(false);
         return;
       }
 

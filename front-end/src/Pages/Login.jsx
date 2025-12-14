@@ -3,15 +3,15 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const Login = ({ setUser }) => {
-    const [fromData, setFormData] = useState({
+    const [formData, setFormData] = useState({
         email: '',
         password: ''
     });
     const [error, setError]= useState('');
     const navigate = useNavigate();
-    const handelChange = (e) => {
+    const handleChange = (e) => {
         setFormData({
-            ...fromData,
+            ...formData,
             [e.target.name]: e.target.value
 
         })
@@ -21,7 +21,7 @@ const Login = ({ setUser }) => {
         try {
             const res = await axios.post("/api/users/login", formData);
             localStorage.setItems("token", res.data.token);
-            console.log(res.data);
+            console.log(res.data.user);
             setUser(res.data);
             navigate('/');
         } catch (err) {
@@ -42,7 +42,7 @@ const Login = ({ setUser }) => {
                     <input className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-200 outline-none focus:border-blue-400" 
                     type="email"
                     name="email"
-                    value={fromData.email}
+                    value={formData.email}
                     onChange={handleChange}
                     placeholder="Enter your email"
                     autoComplete="off"
