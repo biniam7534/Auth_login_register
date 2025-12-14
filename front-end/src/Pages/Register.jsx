@@ -25,7 +25,8 @@ const Register = ({ setUser }) => {
       const res = await axios.post("/api/users/register", formData);
 
       localStorage.setItem("token", res.data.token);
-      setUser(res.data.user); // backend should return user
+      // backend returns id, username, email, token
+      if (typeof setUser === 'function') setUser({ id: res.data.id, username: res.data.username, email: res.data.email });
       navigate("/");
     } catch (err) {
       setError(err.response?.data?.message || "Registration failed");
@@ -47,7 +48,7 @@ const Register = ({ setUser }) => {
               Username
             </label>
             <input
-              className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-200 outline-none focus:border-blue-400"
+              className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-orange-200 outline-none focus:border-orange-300"
               type="text"
               name="username"
               value={formData.username}
@@ -62,7 +63,7 @@ const Register = ({ setUser }) => {
               Email
             </label>
             <input
-              className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-200 outline-none focus:border-blue-400"
+              className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-orange-200 outline-none focus:border-orange-300"
               type="email"
               name="email"
               value={formData.email}
@@ -77,7 +78,7 @@ const Register = ({ setUser }) => {
               Password
             </label>
             <input
-              className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-200 outline-none focus:border-blue-400"
+              className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-orange-200 outline-none focus:border-orange-400"
               type="password"
               name="password"
               value={formData.password}

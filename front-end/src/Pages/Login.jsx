@@ -20,9 +20,10 @@ const Login = ({ setUser }) => {
         e.preventDefault();
         try {
             const res = await axios.post("/api/users/login", formData);
-            localStorage.setItems("token", res.data.token);
-            console.log(res.data.user);
-            setUser(res.data);
+            // save token
+            localStorage.setItem("token", res.data.token);
+            // set user in parent if callback provided
+            if (typeof setUser === 'function') setUser({ id: res.data.id, username: res.data.username, email: res.data.email });
             navigate('/');
         } catch (err) {
             setError(err.response?.data?.message || "login failed");
@@ -30,16 +31,16 @@ const Login = ({ setUser }) => {
     };
     
     return (
-    <div className ="min-screen flex items-center justify-center bg-gray-200">
+    <div className ="min-h-screen flex items-center justify-center bg-gray-200">
         <div className ="bg-white p-8 rounded-lg shadow-lg w-full max-w-md border border-gray-200">
-            <h2 classname ="text-2xl font-bold mb-6 text-center text-gray-800">Login</h2>
+            <h2 className ="text-2xl font-bold mb-6 text-center text-gray-800">Login</h2>
             {error && <p className="text-red-500 mb-4 text-sm">{error}</p> }
             <form onSubmit={handleSubmit }>
                 <div>
                     <label className="block text-gray-600 text-sm font-medium mb-1">
                         Email
                     </label>
-                    <input className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-200 outline-none focus:border-blue-400" 
+                    <input className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-orange-200 outline-none focus:border-orange-300" 
                     type="email"
                     name="email"
                     value={formData.email}
@@ -53,10 +54,10 @@ const Login = ({ setUser }) => {
                     <label className="block text-gray-600 text-sm font-medium mb-1">
                         Password
                     </label>
-                    <input className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-200 outline-none focus:border-blue-400" 
-                    type="Password"
+                    <input className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-orange-200 outline-none focus:border-orange-300" 
+                    type="password"
                     name="password"
-                    value={FormData.password}
+                    value={formData.password}
                     onChange={handleChange}
                     placeholder="Enter your password"
                     required

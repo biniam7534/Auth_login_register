@@ -61,6 +61,7 @@ function App() {
           path="/register"
           element={user ? <Navigate to="/" />:<Register setUser={setUser} />}
         />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>
   );

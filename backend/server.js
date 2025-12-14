@@ -18,7 +18,7 @@ app.use("/api/users", authRoutes)
 
 connectDB();
 
-// Print registered routes for debugging
+
 function listRoutes() {
     const routes = [];
     if (!app._router || !app._router.stack) {
@@ -27,11 +27,11 @@ function listRoutes() {
     }
 
     app._router.stack.forEach((middleware) => {
-        if (middleware.route) { // routes registered directly on the app
+        if (middleware.route) { 
             const path = middleware.route.path;
             const methods = Object.keys(middleware.route.methods).join(',').toUpperCase();
             routes.push(`${methods} ${path}`);
-        } else if (middleware.name === 'router') { // router middleware
+        } else if (middleware.name === 'router') { 
             middleware.handle.stack.forEach(function(handler) {
                 const route = handler.route;
                 if (route) {

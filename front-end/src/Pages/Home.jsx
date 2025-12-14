@@ -26,7 +26,7 @@ const Home = ({ user, error }) => {
               <Link to="/login" className="w-full bg-blue-500 text-white p-3 rounded-md hover:bg-blue-600 font-medium">
                 Login
               </Link>
-              <Link to="/register" className="w-full bg-gray-200 text-white p-3 rounded-md hover:bg-gray-300 font-medium">
+              <Link to="/register" className="w-full bg-gray-200 text-black p-3 rounded-md hover:bg-gray-300 font-medium">
                 Register
               </Link>
             </div>
